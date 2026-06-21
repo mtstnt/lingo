@@ -45,3 +45,10 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres

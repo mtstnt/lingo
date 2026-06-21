@@ -19,6 +19,9 @@ import { VocabularyBankModule } from './vocabulary-bank/vocabulary-bank.module';
         uri: config.getOrThrow('DATABASE_URL'),
         autoLoadModels: true,
         synchronize: true,
+        define: {
+          underscored: true,
+        },
       }),
       inject: [ConfigService],
     }),

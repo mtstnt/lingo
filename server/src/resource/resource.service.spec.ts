@@ -19,6 +19,9 @@ describe('ResourceService', () => {
           autoLoadModels: true,
           synchronize: true,
           logging: false,
+          define: {
+            underscored: true,
+          },
         }),
         SequelizeModule.forFeature([Resource, User]),
       ],

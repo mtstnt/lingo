@@ -231,11 +231,11 @@ Soft-delete a resource. Only allows deleting resources owned by the authenticate
 
 ---
 
-## Resource Queue
+## Queue
 
-All resource queue endpoints require authentication (`Authorization: Bearer <accessToken>`) and are scoped to the authenticated user.
+All queue endpoints require authentication (`Authorization: Bearer <accessToken>`) and are scoped to the authenticated user.
 
-### GET /resource/queue
+### GET /queue
 
 List all queued resources for the authenticated user.
 
@@ -258,7 +258,7 @@ List all queued resources for the authenticated user.
 **Errors:**
 - `401 Unauthorized` - Missing or invalid token
 
-### POST /resource/queue
+### POST /queue
 
 Push a new resource for queue processing. Validates that the resource exists and is owned by the user.
 
@@ -289,7 +289,7 @@ Push a new resource for queue processing. Validates that the resource exists and
 - `401 Unauthorized` - Missing or invalid token
 - `404 Not Found` - Resource not found or not owned by user
 
-### DELETE /resource/queue/:resource_queue_id
+### DELETE /queue/:queue_id
 
 Cancel a queued resource. Updates the queue entry status to `canceled` and marks any open log entries as canceled.
 

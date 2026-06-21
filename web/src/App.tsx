@@ -1,25 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/components/auth-provider";
 import { ProtectedRoute } from "@/components/protected-route";
+import { DashboardLayout } from "@/components/dashboard-layout";
 import SignIn from "@/pages/auth/signin";
 import SignUp from "@/pages/auth/signup";
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/use-auth";
-
-function Home() {
-  const { user, logout } = useAuth();
-  return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-4">
-      <h1 className="text-3xl font-bold tracking-tight">LingoLearn</h1>
-      <p className="text-muted-foreground">
-        Welcome, <span className="font-medium text-foreground">{user?.email}</span>
-      </p>
-      <Button variant="outline" onClick={logout}>
-        Log out
-      </Button>
-    </div>
-  );
-}
+import ResourcesPage from "@/pages/resources";
+import MaterialsPage from "@/pages/materials";
+import MaterialDetailPage from "@/pages/material-detail";
+import QueuePage from "@/pages/queue";
 
 function App() {
   return (
@@ -29,14 +17,19 @@ function App() {
           <Route path="/auth/signin" element={<SignIn />} />
           <Route path="/auth/signup" element={<SignUp />} />
           <Route
-            path="/"
             element={
               <ProtectedRoute>
-                <Home />
+                <DashboardLayout />
               </ProtectedRoute>
             }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          >
+            <Route path="/my/resources" element={<ResourcesPage />} />
+            <Route path="/my/materials" element={<MaterialsPage />} />
+            <Route path="/my/materials/:id" element={<MaterialDetailPage />} />
+            <Route path="/my/resources/queue" element={<QueuePage />} />
+          </Route>
+          <Route path="/" element={<Navigate to="/my/resources" replace />} />
+          <Route path="*" element={<Navigate to="/my/resources" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

@@ -16,6 +16,9 @@ describe('UserService', () => {
           autoLoadModels: true,
           synchronize: true,
           logging: false,
+          define: {
+            underscored: true,
+          },
         }),
         SequelizeModule.forFeature([User]),
       ],

@@ -24,7 +24,7 @@ interface RequestWithUser extends Request {
 @ApiTags('Resource Queue')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Controller('resource/queue')
+@Controller('queue')
 export class ResourceQueueController {
   constructor(private readonly resourceQueueService: ResourceQueueService) {}
 
@@ -43,12 +43,12 @@ export class ResourceQueueController {
     return this.resourceQueueService.create(req.user.id, dto);
   }
 
-  @Delete(':resource_queue_id')
+  @Delete(':queue_id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Cancel a queued resource' })
   async cancel(
     @Request() req: RequestWithUser,
-    @Param('resource_queue_id', ParseIntPipe) resourceQueueId: number,
+    @Param('queue_id', ParseIntPipe) resourceQueueId: number,
   ): Promise<ResourceQueue> {
     return this.resourceQueueService.cancel(req.user.id, resourceQueueId);
   }
