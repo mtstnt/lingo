@@ -9,6 +9,7 @@ import { ResourceQueueService } from './resource-queue.service';
 import { ResourceQueueController } from './resource-queue.controller';
 import { ResourceQueueProcessor } from './resource-queue.processor';
 import { MaterialModule } from '../material/material.module';
+import { VocabularyBankModule } from '../vocabulary-bank/vocabulary-bank.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MaterialModule } from '../material/material.module';
     ]),
     BullModule.registerQueue({ name: 'resource-processing' }),
     forwardRef(() => MaterialModule),
+    forwardRef(() => VocabularyBankModule),
   ],
   controllers: [ResourceQueueController],
   providers: [ResourceQueueService, ResourceQueueProcessor],

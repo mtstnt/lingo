@@ -6,3 +6,4 @@
 - [Resource](specs/resource.md) - Raw media/text resources for language learning
 - [Resource Queue](specs/resource-queue.md) - Background processing queue for AI resource processing
 - [Material](specs/material.md) - Learning-ready materials generated from AI processing
+- [Vocabulary Bank](specs/vocabulary-bank.md) - Vocabulary storage with references and sentence links

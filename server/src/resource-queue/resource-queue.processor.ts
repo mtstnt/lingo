@@ -6,6 +6,7 @@ import { ResourceQueue } from './entities/resource-queue.entity';
 import { ResourceQueueLog } from './entities/resource-queue-log.entity';
 import { Material } from '../material/entities/material.entity';
 import { Resource } from '../resource/entities/resource.entity';
+import { VocabularyBankService } from '../vocabulary-bank/vocabulary-bank.service';
 
 const MAX_RETRIES = 3;
 
@@ -22,6 +23,7 @@ export class ResourceQueueProcessor {
     private readonly materialModel: typeof Material,
     @InjectModel(Resource)
     private readonly resourceModel: typeof Resource,
+    private readonly vocabularyBankService: VocabularyBankService,
   ) {}
 
   @Process()
@@ -70,7 +72,7 @@ export class ResourceQueueProcessor {
         queueEntry.prompt,
       );
 
-      await this.materialModel.create({
+      const material = await this.materialModel.create({
         resource_id: queueEntry.resource_id,
         user_id: queueEntry.user_id,
         name: resource.name,
@@ -78,6 +80,12 @@ export class ResourceQueueProcessor {
         grammar: JSON.stringify(aiResponse.grammar),
         quiz: JSON.stringify(aiResponse.quiz),
       });
+
+      await this.populateVocabularyBank(
+        queueEntry.user_id,
+        material.id,
+        aiResponse.vocabulary,
+      );
 
       await queueEntry.update({ status: 'completed' });
 
@@ -165,5 +173,46 @@ export class ResourceQueueProcessor {
         },
       ],
     };
+  }
+
+  private async populateVocabularyBank(
+    userId: number,
+    materialId: number,
+    vocabulary: Array<{
+      sentence: string;
+      words: Array<{ word: string; meaning: string; details: string }>;
+    }>,
+  ): Promise<void> {
+    const seen = new Set<string>();
+
+    for (
+      let sentenceIndex = 0;
+      sentenceIndex < vocabulary.length;
+      sentenceIndex++
+    ) {
+      const { words } = vocabulary[sentenceIndex];
+
+      for (const { word, meaning, details } of words) {
+        if (seen.has(word)) {
+          continue;
+        }
+        seen.add(word);
+
+        const entry = await this.vocabularyBankService.upsertWord(
+          userId,
+          materialId,
+          sentenceIndex,
+          word,
+          meaning,
+          details,
+        );
+
+        await this.vocabularyBankService.decomposeAndReference(
+          userId,
+          entry.id,
+          word,
+        );
+      }
+    }
   }
 }

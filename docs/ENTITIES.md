@@ -116,3 +116,54 @@ Learning-ready material generated from AI processing of a resource.
 
 **Module:** `MaterialModule`
 **File:** `server/src/material/entities/material.entity.ts`
+
+---
+
+## VocabularyBank
+
+Stores all known vocabulary and combinations. Auto-populated from materials.
+
+| Field          | Type       | Constraints                |
+|----------------|------------|----------------------------|
+| id             | number     | PK, auto-increment         |
+| user_id        | number     | required, FK to User       |
+| original_word  | string     | required                   |
+| pronunciation  | string     | required (pinyin, hiragana, or phonetic) |
+| meaning        | text (JSON)| required                   |
+| createdAt      | Date       | auto-generated             |
+| updatedAt      | Date       | auto-generated             |
+| deletedAt      | Date       | nullable                   |
+
+**Module:** `VocabularyBankModule`
+**File:** `server/src/vocabulary-bank/entities/vocabulary-bank.entity.ts`
+
+---
+
+## VocabularyBankReference
+
+Self-referencing many-to-many for word building blocks (e.g., 水果 -> 水, 果).
+
+| Field                  | Type   | Constraints        |
+|------------------------|--------|--------------------|
+| id                     | number | PK, auto-increment |
+| vocabulary_id          | number | required, FK to VocabularyBank |
+| referred_vocabulary_id | number | required, FK to VocabularyBank |
+
+**Module:** `VocabularyBankModule`
+**File:** `server/src/vocabulary-bank/entities/vocabulary-bank-reference.entity.ts`
+
+---
+
+## VocabularyBankSentence
+
+Links vocabulary to material sentences as example sentences.
+
+| Field          | Type   | Constraints        |
+|----------------|--------|--------------------|
+| id             | number | PK, auto-increment |
+| vocabulary_id  | number | required, FK to VocabularyBank |
+| material_id    | number | required, FK to Material |
+| sentence_index | number | required           |
+
+**Module:** `VocabularyBankModule`
+**File:** `server/src/vocabulary-bank/entities/vocabulary-bank-sentence.entity.ts`

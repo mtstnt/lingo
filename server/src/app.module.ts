@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ResourceModule } from './resource/resource.module';
 import { ResourceQueueModule } from './resource-queue/resource-queue.module';
 import { MaterialModule } from './material/material.module';
+import { VocabularyBankModule } from './vocabulary-bank/vocabulary-bank.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { MaterialModule } from './material/material.module';
     ResourceModule,
     ResourceQueueModule,
     MaterialModule,
+    VocabularyBankModule,
   ],
 })
 export class AppModule {}

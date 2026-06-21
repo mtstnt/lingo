@@ -80,3 +80,25 @@ Vocabulary Bank Sentences entity:
 - vocabulary_id
 - material_id
 - sentence_index
+
+Endpoints:
+- GET /api/vocabularies -> Fetches all vocabularies for the user, but excluding the relationships.
+- GET /api/vocabularies/{id} -> Fetches all references & sentence banks for that vocabulary
+- POST /api/vocabularies
+- PUT /api/vocabularies/{id}
+- DELETE /api/vocabularies/{id}
+
+# Integration of all Features
+
+- When resource processing queue is done:
+  - Create material based on the AI's response.
+  - Upsert vocabulary bank information based on the transcript.
+  - Update example sentences of all existing vocabs, don't insert if the same sentence already exist.
+  - Mark the resource queue entry to be done.
+  
+# Media Processing Pipeline
+
+- If the URL is YouTube video, use the Gemini's YouTube video feature to insert it.
+- If the URL is article, then fetch the site then provide to AI to extract only the article/content.
+- Other providers will have its own processor, but later: x (twitter), mastodon, facebook, reddit, etc.
+- Else, process uploaded asset as just file to feed to the AI model.

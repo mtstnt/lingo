@@ -379,3 +379,133 @@ Soft-delete a material. Only allows deleting materials owned by the authenticate
 **Errors:**
 - `401 Unauthorized` - Missing or invalid token
 - `404 Not Found` - Material not found or not owned by user
+
+---
+
+## Vocabulary Bank
+
+All vocabulary bank endpoints require authentication (`Authorization: Bearer <accessToken>`) and are scoped to the authenticated user.
+
+### GET /vocabularies
+
+List all vocabularies for the authenticated user. Excludes relationships.
+
+**Response (200):**
+```json
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "original_word": "水果",
+    "pronunciation": "shuǐguǒ",
+    "meaning": "{\"en\":\"fruit\"}",
+    "createdAt": "2026-06-21T00:00:00.000Z",
+    "updatedAt": "2026-06-21T00:00:00.000Z"
+  }
+]
+```
+
+**Errors:**
+- `401 Unauthorized` - Missing or invalid token
+
+### GET /vocabularies/:id
+
+Get a single vocabulary by ID with its references and sentence links.
+
+**Response (200):**
+```json
+{
+  "id": 1,
+  "user_id": 1,
+  "original_word": "水果",
+  "pronunciation": "shuǐguǒ",
+  "meaning": "{\"en\":\"fruit\"}",
+  "createdAt": "2026-06-21T00:00:00.000Z",
+  "updatedAt": "2026-06-21T00:00:00.000Z",
+  "references": [
+    { "id": 1, "vocabulary_id": 1, "referred_vocabulary_id": 2 },
+    { "id": 2, "vocabulary_id": 1, "referred_vocabulary_id": 3 }
+  ],
+  "sentences": [
+    { "id": 1, "vocabulary_id": 1, "material_id": 1, "sentence_index": 0 }
+  ]
+}
+```
+
+**Errors:**
+- `401 Unauthorized` - Missing or invalid token
+- `404 Not Found` - Vocabulary not found or not owned by user
+
+### POST /vocabularies
+
+Create a new vocabulary entry.
+
+**Request:**
+```json
+{
+  "original_word": "水果",
+  "pronunciation": "shuǐguǒ",
+  "meaning": "{\"en\":\"fruit\"}"
+}
+```
+
+**Response (201):**
+```json
+{
+  "id": 1,
+  "user_id": 1,
+  "original_word": "水果",
+  "pronunciation": "shuǐguǒ",
+  "meaning": "{\"en\":\"fruit\"}",
+  "createdAt": "2026-06-21T00:00:00.000Z",
+  "updatedAt": "2026-06-21T00:00:00.000Z"
+}
+```
+
+**Errors:**
+- `400 Bad Request` - Validation failed
+- `401 Unauthorized` - Missing or invalid token
+
+### PUT /vocabularies/:id
+
+Update a vocabulary entry.
+
+**Request:**
+```json
+{
+  "pronunciation": "shuǐguǒ (updated)"
+}
+```
+
+**Response (200):**
+```json
+{
+  "id": 1,
+  "user_id": 1,
+  "original_word": "水果",
+  "pronunciation": "shuǐguǒ (updated)",
+  "meaning": "{\"en\":\"fruit\"}",
+  "createdAt": "2026-06-21T00:00:00.000Z",
+  "updatedAt": "2026-06-21T00:01:00.000Z"
+}
+```
+
+**Errors:**
+- `400 Bad Request` - Validation failed
+- `401 Unauthorized` - Missing or invalid token
+- `404 Not Found` - Vocabulary not found or not owned by user
+
+### DELETE /vocabularies/:id
+
+Delete a vocabulary entry and cascade delete its references and sentence links.
+
+**Response (200):**
+```json
+{
+  "message": "Vocabulary deleted successfully"
+}
+```
+
+**Errors:**
+- `401 Unauthorized` - Missing or invalid token
+- `404 Not Found` - Vocabulary not found or not owned by user
