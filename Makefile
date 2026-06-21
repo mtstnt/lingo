@@ -1,3 +1,7 @@
+dev-web:
+	cd web && \
+	bun dev
+
 dev-serve:
 	docker compose -f compose.dev.yml up -d && \
 	cd server && \

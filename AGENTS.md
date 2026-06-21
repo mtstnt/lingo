@@ -1,6 +1,6 @@
 # LingoLearn
 
-Monorepo: Flutter mobile app (`app/`) + NestJS API (`server/`).
+Monorepo: Flutter mobile app (`app/`) + NestJS API (`server/`) + React web app (`web/`).
 
 ## Server (`server/`)
 
@@ -55,9 +55,27 @@ docker compose -f compose.prd.yml up --build
 
 Flutter project. Standard Flutter commands apply (`flutter run`, `flutter build`, etc.).
 
+## Web (`web/`)
+
+**Stack**: React 19 + Vite 8 + TypeScript 6 + Tailwind CSS v4 + shadcn/ui
+
+**Package manager**: bun. `bun.lock` is the lockfile.
+
+**Commands** (run from `web/`):
+- `bun run dev` — dev server with HMR
+- `bun run build` — typecheck + build to `dist/`
+- `bun run lint` — eslint
+- `bun run preview` — preview production build
+
+**shadcn**: Components live in `src/components/ui/`. Add new ones with `bunx shadcn@latest add <component>`. Config in `components.json`.
+
+**Path alias**: `@/` maps to `src/`.
+
+**Theming**: Always use shadcn/Tailwind theme variables (`text-foreground`, `bg-background`, `text-primary`, `text-muted-foreground`, `border-border`, etc.) instead of hardcoded colors (`text-gray-500`, `bg-white`, `text-black`, etc.). This ensures consistent light/dark mode support.
+
 ## Conventions
 
-- `.gitignore` at root covers both projects
+- `.gitignore` at root covers all three projects
 - `CLAUDE.md` references this file
 - No CI workflows configured yet
 
