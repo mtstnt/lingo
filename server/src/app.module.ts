@@ -10,9 +10,9 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
   imports: [
     ConfigModule.forRoot(),
     MikroOrmModule.forRootAsync({
+      driver: PostgreSqlDriver,
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
-        driver: PostgreSqlDriver,
         clientUrl: config.getOrThrow('DATABASE_URL'),
         autoLoadEntities: true,
       }),
