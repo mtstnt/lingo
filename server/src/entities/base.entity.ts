@@ -7,7 +7,6 @@ import {
   UpdatedAt,
   DeletedAt,
   Table,
-  DataType,
 } from 'sequelize-typescript';
 
 @Table

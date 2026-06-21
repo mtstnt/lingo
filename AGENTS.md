@@ -68,3 +68,9 @@ Flutter project. Standard Flutter commands apply (`flutter run`, `flutter build`
 - **Always update specs when implementing or modifying features**
 - **Keep specs in sync on every change** — if code changes, update the corresponding spec
 - **Re-analyze requests** — when asked to re-analyze a feature, update its spec in `docs/specs/` and refresh `docs/spec.md` index
+
+## Entities & API Specs
+
+- `docs/API.md` stores all API endpoints, a description, their request and response format.
+- `docs/ENTITIES.md` stores a list of entities that all mobile app, web app, and backend should know to implement together.
+- After any edits, make sure to update these 2 files if there are any changes.

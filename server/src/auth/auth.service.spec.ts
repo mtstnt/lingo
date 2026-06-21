@@ -47,11 +47,22 @@ describe('AuthService', () => {
 
   describe('register', () => {
     it('should register a new user', async () => {
-      const dto = { email: 'test@test.com', password: 'password123', firstName: 'John', lastName: 'Doe' };
+      const dto = {
+        email: 'test@test.com',
+        password: 'password123',
+        firstName: 'John',
+        lastName: 'Doe',
+      };
       mockUserService.findByEmail.mockResolvedValue(null);
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
-      mockUserService.create.mockResolvedValue({ id: 1, ...dto, password: 'hashedPassword' });
-      mockJwtService.signAsync.mockResolvedValueOnce('accessToken').mockResolvedValueOnce('refreshToken');
+      mockUserService.create.mockResolvedValue({
+        id: 1,
+        ...dto,
+        password: 'hashedPassword',
+      });
+      mockJwtService.signAsync
+        .mockResolvedValueOnce('accessToken')
+        .mockResolvedValueOnce('refreshToken');
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedRT');
 
       const result = await service.register(dto);
@@ -61,8 +72,16 @@ describe('AuthService', () => {
     });
 
     it('should throw ConflictException if email exists', async () => {
-      const dto = { email: 'test@test.com', password: 'password123', firstName: 'John', lastName: 'Doe' };
-      mockUserService.findByEmail.mockResolvedValue({ id: 1, email: 'test@test.com' });
+      const dto = {
+        email: 'test@test.com',
+        password: 'password123',
+        firstName: 'John',
+        lastName: 'Doe',
+      };
+      mockUserService.findByEmail.mockResolvedValue({
+        id: 1,
+        email: 'test@test.com',
+      });
 
       await expect(service.register(dto)).rejects.toThrow(ConflictException);
     });
@@ -71,9 +90,15 @@ describe('AuthService', () => {
   describe('login', () => {
     it('should login with valid credentials', async () => {
       const dto = { email: 'test@test.com', password: 'password123' };
-      mockUserService.findByEmail.mockResolvedValue({ id: 1, email: 'test@test.com', password: 'hashedPassword' });
+      mockUserService.findByEmail.mockResolvedValue({
+        id: 1,
+        email: 'test@test.com',
+        password: 'hashedPassword',
+      });
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-      mockJwtService.signAsync.mockResolvedValueOnce('accessToken').mockResolvedValueOnce('refreshToken');
+      mockJwtService.signAsync
+        .mockResolvedValueOnce('accessToken')
+        .mockResolvedValueOnce('refreshToken');
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedRT');
 
       const result = await service.login(dto);
@@ -90,7 +115,11 @@ describe('AuthService', () => {
 
     it('should throw UnauthorizedException if password is invalid', async () => {
       const dto = { email: 'test@test.com', password: 'wrongpassword' };
-      mockUserService.findByEmail.mockResolvedValue({ id: 1, email: 'test@test.com', password: 'hashedPassword' });
+      mockUserService.findByEmail.mockResolvedValue({
+        id: 1,
+        email: 'test@test.com',
+        password: 'hashedPassword',
+      });
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
       await expect(service.login(dto)).rejects.toThrow(UnauthorizedException);
@@ -99,9 +128,15 @@ describe('AuthService', () => {
 
   describe('refreshTokens', () => {
     it('should refresh tokens with valid refresh token', async () => {
-      mockUserService.findById.mockResolvedValue({ id: 1, email: 'test@test.com', refreshToken: 'hashedRT' });
+      mockUserService.findById.mockResolvedValue({
+        id: 1,
+        email: 'test@test.com',
+        refreshToken: 'hashedRT',
+      });
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-      mockJwtService.signAsync.mockResolvedValueOnce('newAccessToken').mockResolvedValueOnce('newRefreshToken');
+      mockJwtService.signAsync
+        .mockResolvedValueOnce('newAccessToken')
+        .mockResolvedValueOnce('newRefreshToken');
       (bcrypt.hash as jest.Mock).mockResolvedValue('newHashedRT');
 
       const result = await service.refreshTokens(1, 'refreshToken');
@@ -112,13 +147,20 @@ describe('AuthService', () => {
     it('should throw UnauthorizedException if user not found', async () => {
       mockUserService.findById.mockResolvedValue(null);
 
-      await expect(service.refreshTokens(1, 'token')).rejects.toThrow(UnauthorizedException);
+      await expect(service.refreshTokens(1, 'token')).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
     it('should throw UnauthorizedException if no refresh token stored', async () => {
-      mockUserService.findById.mockResolvedValue({ id: 1, email: 'test@test.com' });
+      mockUserService.findById.mockResolvedValue({
+        id: 1,
+        email: 'test@test.com',
+      });
 
-      await expect(service.refreshTokens(1, 'token')).rejects.toThrow(UnauthorizedException);
+      await expect(service.refreshTokens(1, 'token')).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 
