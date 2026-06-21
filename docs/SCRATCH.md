@@ -39,6 +39,11 @@ Resource Queue Log entity:
 - status_info (error text for debugging)
 - response (AI response, should be in JSON)
 
+Add endpoints to:
+- List current user's queued resources: GET /api/resource/queue
+- Push a new resource for queue: POST /api/resource/queue
+- Cancel a resource for queue: DELETE /api/resource/queue/{resource_queue_id}, update the log status to canceled
+
 # Material
 
 Materials are learning-ready material, ready to use by the app and web app for learning without having to use the AI again.

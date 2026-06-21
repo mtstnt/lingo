@@ -5,6 +5,8 @@ import { BullModule } from '@nestjs/bull';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ResourceModule } from './resource/resource.module';
+import { ResourceQueueModule } from './resource-queue/resource-queue.module';
+import { MaterialModule } from './material/material.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { ResourceModule } from './resource/resource.module';
     UserModule,
     AuthModule,
     ResourceModule,
+    ResourceQueueModule,
+    MaterialModule,
   ],
 })
 export class AppModule {}

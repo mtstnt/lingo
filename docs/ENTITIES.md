@@ -46,3 +46,73 @@ Resource is a raw media or text for language learning. It will be converted into
 
 **Module:** `ResourceModule`
 **File:** `server/src/resource/entities/resource.entity.ts`
+
+---
+
+## ResourceQueue
+
+Resource processing queue entry. Tracks resources sent for AI processing.
+
+| Field                      | Type                                        | Constraints                |
+|----------------------------|---------------------------------------------|----------------------------|
+| id                         | number                                      | PK, auto-increment         |
+| resource_id                | number                                      | required, FK to Resource   |
+| user_id                    | number                                      | required, FK to User       |
+| status                     | enum: `pending`, `processing`, `completed`, `canceled`, `failed` | required, default: `pending` |
+| retry_count                | number                                      | default: 0                 |
+| last_processing_attempt_at | Date                                        | nullable                   |
+| prompt                     | text                                        | required                   |
+| createdAt                  | Date                                        | auto-generated             |
+| updatedAt                  | Date                                        | auto-generated             |
+| deletedAt                  | Date                                        | nullable                   |
+
+**Module:** `ResourceQueueModule`
+**File:** `server/src/resource-queue/entities/resource-queue.entity.ts`
+
+---
+
+## ResourceQueueLog
+
+Log of each processing attempt for a resource queue entry.
+
+| Field              | Type                                  | Constraints                |
+|--------------------|---------------------------------------|----------------------------|
+| id                 | number                                | PK, auto-increment         |
+| resource_queue_id  | number                                | required, FK to ResourceQueue |
+| start_at           | Date                                  | required                   |
+| end_at             | Date                                  | nullable                   |
+| status             | enum: `completed`, `canceled`, `failed` | required                |
+| status_info        | text                                  | nullable, error details    |
+| response           | text (JSON)                           | nullable, AI response      |
+| createdAt          | Date                                  | auto-generated             |
+| updatedAt          | Date                                  | auto-generated             |
+| deletedAt          | Date                                  | nullable                   |
+
+**Module:** `ResourceQueueModule`
+**File:** `server/src/resource-queue/entities/resource-queue-log.entity.ts`
+
+---
+
+## Material
+
+Learning-ready material generated from AI processing of a resource.
+
+| Field     | Type       | Constraints                |
+|-----------|------------|----------------------------|
+| id        | number     | PK, auto-increment         |
+| resource_id | number   | required, FK to Resource   |
+| user_id   | number     | required, FK to User       |
+| name      | string     | required                   |
+| vocabulary| text (JSON)| required                   |
+| grammar   | text (JSON)| required                   |
+| quiz      | text (JSON)| required                   |
+| createdAt | Date       | auto-generated             |
+| updatedAt | Date       | auto-generated             |
+| deletedAt | Date       | nullable                   |
+
+**vocabulary** JSON structure: list of sentences, each with word details and meanings.
+**grammar** JSON structure: grammatical structures per sentence (referenced by index).
+**quiz** JSON structure: MCQ questions with options and correct answer index.
+
+**Module:** `MaterialModule`
+**File:** `server/src/material/entities/material.entity.ts`
