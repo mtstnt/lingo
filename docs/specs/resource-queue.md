@@ -68,7 +68,6 @@ List all queued resources for the authenticated user.
     "status": "pending",
     "retry_count": 0,
     "last_processing_attempt_at": null,
-    "prompt": "Extract vocabulary and grammar",
     "createdAt": "2026-06-21T00:00:00.000Z",
     "updatedAt": "2026-06-21T00:00:00.000Z"
   }

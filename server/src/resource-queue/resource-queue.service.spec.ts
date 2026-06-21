@@ -117,7 +117,7 @@ describe('ResourceQueueService', () => {
 
       const entries = await service.findAll(testUser.id);
       expect(entries).toHaveLength(1);
-      expect(entries[0].prompt).toBe('My prompt');
+      expect(entries[0].user_id).toBe(testUser.id);
     });
 
     it('should return empty array when no entries exist', async () => {

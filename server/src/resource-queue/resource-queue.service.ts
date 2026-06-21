@@ -26,6 +26,7 @@ export class ResourceQueueService {
   async findAll(userId: number): Promise<ResourceQueue[]> {
     return this.resourceQueueModel.findAll({
       where: { user_id: userId },
+      attributes: { exclude: ['prompt'] },
     });
   }
 
