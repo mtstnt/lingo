@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { BullModule } from '@nestjs/bull';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MikroOrmModule.forRootAsync({
-      driver: PostgreSqlDriver,
+    SequelizeModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
-        clientUrl: config.getOrThrow('DATABASE_URL'),
-        autoLoadEntities: true,
+        dialect: 'postgres',
+        uri: config.getOrThrow('DATABASE_URL'),
+        autoLoadModels: true,
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),
@@ -25,8 +25,8 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
       }),
       inject: [ConfigService],
     }),
+    UserModule,
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

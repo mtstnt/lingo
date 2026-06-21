@@ -4,7 +4,7 @@ Monorepo: Flutter mobile app (`app/`) + NestJS API (`server/`).
 
 ## Server (`server/`)
 
-**Stack**: NestJS 11 + MikroORM 7 (PostgreSQL) + Bull (Redis) + MinIO
+**Stack**: NestJS 11 + Sequelize 6 (PostgreSQL) + Bull (Redis) + MinIO
 
 **Package manager**: bun (not npm). `bun.lock` is the lockfile.
 
@@ -16,11 +16,26 @@ Monorepo: Flutter mobile app (`app/`) + NestJS API (`server/`).
 - `bun run test` — jest unit tests
 - `bun run test:e2e` — e2e tests
 
-**MikroORM**: `autoLoadEntities: true` — register entities via `MikroOrmModule.forFeature([Entity])` in feature modules. Do not add entity paths to `forRoot`.
+**Sequelize**: `autoLoadModels: true`, `synchronize: true` — register entities via `SequelizeModule.forFeature([Entity])` in feature modules. Entities use `sequelize-typescript` decorators.
 
 **Bull queues**: Register processors via `BullModule.registerQueue({ name: 'queueName' })`.
 
 **Env**: Copy `server/.env.example` to `server/.env`. Required vars: `DATABASE_URL`, `REDIS_URL`, MinIO creds.
+
+## Testing
+
+**Always run tests after changing code and fix any failures before finishing.**
+
+**Always implement tests for new features.**
+
+```bash
+bun run test       # run unit tests
+bun run test:e2e   # run e2e tests
+```
+
+**Database services**: Use in-memory SQLite for unit tests. Create a test module with `SequelizeModule.forRoot({ dialect: 'sqlite', storage: ':memory:' })`.
+
+**Entities**: Use `declare` on entity properties to avoid Sequelize getter/setter shadowing issues.
 
 ## Docker
 
